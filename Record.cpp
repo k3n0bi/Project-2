@@ -94,7 +94,7 @@ void Record::print(int nodeid)
   {
     cout << "====================" << endl;
     cout << "      NODE " << nodeid << endl;
-    cout << "====================" << endl;
+    cout << "--------------------" << endl;
     cout << "      ID: " << ID << endl;
     cout << "ParentID: " << ParentID << endl;
     cout << "RawEvent: " << RawEvent << endl;
@@ -114,7 +114,7 @@ void Record::print(int nodeid)
       cout << LHist.at(i);
     }
     cout << "]" << endl;
-    cout << "--------------------" << endl;
+    cout << "====================" << endl;
   }
 }
 

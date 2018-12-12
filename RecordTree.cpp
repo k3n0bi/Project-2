@@ -77,16 +77,17 @@ void RecordTree::addRecord(int slot, string & s)
 
 
 
+    cout << "Value recorded." << endl;
 
   }
   else
   {
-    cout << "Either the record was empty, or something went wrong." << endl;
+    cout << "No Value was recorded." << endl;
   }
   
 
 }
-int RecordTree::findRecordID(string HashID)
+int RecordTree::findRecordID(string HashID)  //Returns -1 if no node is found.
 {
   string tmp = "";
   int id = -1;

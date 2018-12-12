@@ -32,14 +32,18 @@ int main()
   bool exitProgram = false;
 
   printSplash();
-
+  std::string s; // String input by user.
   while (exitProgram == false)
   {
     if (myTree.size() == myTree.empty_slot) { myTree.grow(); }
-    std::string s; // String input by user.
+    
 
     cout << "Enter an option, or enter an 8 digit ID to view. (Enter ? for options)" << endl;
-    
+    // I had a strange case where the prompt would display twice after the "ID not found" message.
+    // Apparently I had some extra stuff in the input stream, so after searching for why getline
+    // ran twice in a while loop, I ran across this: https://stackoverflow.com/questions/7884930/why-this-while-loop-executes-twice-before-asking-for-name
+       std::cin >> std::ws;   // <--- drop whitespaces
+   // It's probably not the best method of clearing out the input stream, but it cleared up my problem. 
     getline(cin, s);
     
     if (s.length() == 8)
@@ -73,25 +77,26 @@ int main()
       if (s == "A" || s == "a")
       {
         // add
-        cout << "Add a record..." << endl;
+        //cout << "Add a record..." << endl;
         {
-          cout << "Enter record value (press enter to commit the value):" << endl;
+          cout << "Enter record value up to 1024 characters. Empty values will be ignored. (Press enter to commit the value):" << endl;
           string in;
           getline(cin, in);
           myTree.addRecord(myTree.empty_slot,in);
         }
       }
-
+      /* Editing records not necessary
       if (s == "E" || s == "e")
       {
         // edit
         cout << "Edit a record..." << endl;
       }
+      */
 
-      if (s == "V" || s == "v")
+      if (s == "I" || s == "i")
       {
         // View
-        cout << "Enter the record id: ";
+        cout << "Enter the 8 character record id: ";
         
         {
           string tempid;
@@ -111,16 +116,52 @@ int main()
           }
         }
 
-        //myTree.print();
-        
+
       }
-      
+
+      if (s == "R" || s == "r")
+      {
+        myTree.print();
+      }
+
+
+      if (s == "S" || s == "s")
+      {
+        // subtree print
+        cout << "Enter the 8 character record id: ";
+
+        {
+          string tempid;
+          cin >> tempid;
+          forcecase(tempid); //force to lowercase
+          {
+            int i;
+            i = myTree.findRecordID(tempid);
+            if (i != -1)
+            {
+              cout << "____________________________________________________" << endl;
+              cout << "== SUBTREE DISPLAY ==" << endl;
+              myTree.display(cout, i);
+              cout << "____________________________________________________" << endl;
+
+            }
+            else
+            {
+              cout << "ID not found." << endl;
+            }
+          }
+        }
+
+
+      }
+
+
       if (s == "T" || s == "t")
       {
-        // add
-        cout << "View the tree..." << endl;
-        //myTree.print();
+        cout << "____________________________________________________" << endl;
         myTree.display(cout,0);
+        cout << "____________________________________________________" << endl;
+
       }
 
       if (s == "Quit" || s == "Q" || s == "q")
@@ -138,8 +179,8 @@ int main()
 void printSplash()
 {
   // Fancy!
-  cout << "============================" << endl;
-  cout << "    COSC 2030 Project 2" << endl;
+  cout << "========================================================" << endl;
+  cout << "                  COSC 2030 Project 2" << endl;
   printHelp();
 
 
@@ -149,13 +190,20 @@ void printSplash()
 void printHelp()
 {
   // Omitted the ? option since it's shown with every prompt to enter data.
-  cout << "============================" << endl;
-  cout << "A to add a record" << endl;
-  cout << "E to edit a record" << endl;
-  cout << "V to view a record" << endl;
-  cout << "T to view the tree" << endl;
-  cout << "Q to quit" << endl;
-  cout << "============================" << endl;
+  cout << "========================================================" << endl;
+  cout << "                  OPTIONS" << endl;
+  cout << "========================================================" << endl;
+
+  cout << "A - add a record" << endl;
+  //cout << "E - edit a record" << endl;
+  cout << "I - view an individual record" << endl;
+  cout << "R - view all records (empty records hidden)" << endl;
+  cout << "S - view a subtree (treat given node as the root)." << endl;
+  cout << "    This is useful if the whole tree is too large to view." << endl;
+  cout << "T - view the entire tree" << endl;
+  cout << "? - view these options again" << endl;
+  cout << "Q - quit" << endl;
+  cout << "========================================================" << endl;
 
 }
 
